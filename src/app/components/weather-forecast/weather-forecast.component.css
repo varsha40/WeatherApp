@@ -1,0 +1,11 @@
+.table-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+#icon{
+    margin-inline-start: -1rem;
+}
+h6{
+    font-size: 18px;
+}

@@ -1,0 +1,13 @@
+<div class="table-container">
+    <div *ngFor="let forecast of weatherForCastInfo">
+        <div *ngIf="weatherForCastInfo.indexOf(forecast) === 0 ; then thenBlock else elseBlock"></div>
+        <h6>
+            <ng-template #thenBlock><b>Now</b></ng-template>
+        </h6>
+        <h6>
+            <ng-template #elseBlock>{{forecast.time | amPmFormat}}</ng-template>
+        </h6>
+        <img  id = "icon" src="{{forecast.icon}}">
+        <h6>{{forecast.temperature | number: '1.0-0'}}&deg;</h6>
+    </div>
+</div>

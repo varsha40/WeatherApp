@@ -1,0 +1,6 @@
+
+<h1> {{headerWeatherInfo.locationName}}</h1>
+<p class = "temperature">{{headerWeatherInfo.temperature  | number: '1.0-0'}}&deg;</p>
+<p class="header-comp">{{headerWeatherInfo.currentWeatherstatus}}</p>
+<p class="header-comp">H:{{headerWeatherInfo.temperature | number: '1.0-0'}}&deg;  L:{{headerWeatherInfo.tempfeelslike | number: '1.0-0'}}&deg;</p>
+<p class="header-comp">{{headerWeatherInfo.day | localtimetoday}} Today</p>

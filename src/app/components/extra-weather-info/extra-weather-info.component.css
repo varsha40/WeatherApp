@@ -1,0 +1,36 @@
+  .horizontal{
+    width: 200px;
+  }
+  .vertical{
+    -webkit-appearance: slider-vertical;
+    height: 100px;
+  }
+  .extra-info-container{
+    display: flex;
+    flex-wrap: wrap;
+    height: 100px;
+    justify-content: space-evenly;
+  }
+  .air{
+    padding: 5px;
+  }
+  .vr{
+    height: 100px;
+    width: 2px;
+    display: inline-block;
+  }
+  .uv{
+    padding-left: 8px;
+    padding-right: 0px;
+  }
+  .uv-color{
+    padding-left: 8px;
+    color: yellow;
+  }
+  .vertical-slider{
+    padding-left: 0px;
+  }
+  .image-container{
+    height: 100px;
+    width: 100px
+  }

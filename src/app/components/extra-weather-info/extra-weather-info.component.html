@@ -1,0 +1,33 @@
+<div class="extra-info-container">
+
+  <div class="air"> 
+    <h6>AIR QUALITY</h6>
+    <h3>{{extraWeatherInfo.airQuality | number: '1.0-0'}} - Moderate</h3>
+    <input type="range" class="form-range" id="customRange1" class="horizontal" disabled>
+  </div>
+  
+  <div class="vr"></div>
+
+  <div class = "uv">
+    <h5> UV INDEX</h5>
+    <h1 class="uv-color">{{extraWeatherInfo.uv}}.0</h1>
+    <h6 class="uv-color">Moderate</h6>
+  </div>
+  
+  <div class= "vertical-slider">
+    <input type="range" class="form-range" id="customRange1" orient="vertical" class="vertical" disabled>
+  </div>
+
+  <div class="vr"></div>
+  <div><img src="assets/images/umbrella (1).png" class="image-container"></div>
+  <div><h2>{{extraWeatherInfo.precipitation}}</h2></div>
+  <div> <img src="assets/images/weather.png" class="image-container"></div> 
+  <div><h2>{{extraWeatherInfo.willItSnow}}</h2></div>
+  <div> <img src="assets/images/temperature.png" class="image-container"></div>
+  <div><h2>{{extraWeatherInfo.temp | number: '1.0-0'}}&deg;</h2></div> 
+
+</div>
+      
+     
+     
+
