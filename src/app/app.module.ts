@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderWeatherInfoComponent } from './components/header-weather-info/header-weather-info.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LocaltimetodayPipe } from './pipes/localtimetoday.pipe';
 import { WeatherForecastComponent } from './components/weather-forecast/weather-forecast.component';
 import { ExtracttimePipe } from './pipes/extracttime.pipe';
@@ -15,6 +15,12 @@ import { AmPmFormatPipe } from './pipes/am-pm-format.pipe';
 import { HomeComponent } from './components/home/home.component';
 import { DefaultComponent } from './components/default/default.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { LocationModalComponent } from './components/location-modal/location-modal.component';
+import { WeatherserviceService } from './services/weatherservice.service';
+import { AlertifyService } from './services/alertify.service';
+import { HttpErrorInterceptorService } from './services/httperror-interceptor.service';
+
 
 @NgModule({
   declarations: [
@@ -29,14 +35,22 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     AmPmFormatPipe,
     HomeComponent,
     DefaultComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LocationModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
-  providers: [],
+  providers: [ {
+    provide : HTTP_INTERCEPTORS,
+    useClass : HttpErrorInterceptorService,
+    multi : true
+
+  },
+   WeatherserviceService, AlertifyService, HttpErrorInterceptorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

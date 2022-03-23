@@ -11,22 +11,40 @@ import { ActivatedRoute } from '@angular/router';
 export class HeaderWeatherInfoComponent implements OnInit {
 
   headerWeatherInfo = new HeaderWeatherInfo('', '', 0, 0, ' ');
-  constructor(private weatherservice: WeatherserviceService,  private route: ActivatedRoute) { }
+  locationName : string = '';
+  constructor(private weatherService: WeatherserviceService,  private route: ActivatedRoute) { }
 
   ngOnInit(): void {
 
     let location = this.route.snapshot.paramMap.get('location');
     if(location === null){
-      location = "Bhubaneswar"
-    }
-    this.weatherservice.getWeatherInfo(location).subscribe(res => {
-      this.headerWeatherInfo.locationName = res.location.name;
-      this.headerWeatherInfo.currentWeatherstatus = res.current.condition.text;
-      this.headerWeatherInfo.temperature = res.current.temp_c;
-      this.headerWeatherInfo.tempfeelslike = res.current.feelslike_c;
-      this.headerWeatherInfo.day = res.location.localtime;
-
+      this.weatherService.getallLocations().subscribe((data) =>{
+        if(data.length == 0){
+          this.locationName = "Bhubaneswar"
+          console.log(this.locationName);
+        }
+        else{
+          this.locationName = data[0].location
+          console.log(this.locationName);
+        }
+      this.weatherService.getWeatherInfo(this.locationName).subscribe(res => {
+        this.headerWeatherInfo.locationName = res.location.name;
+        this.headerWeatherInfo.currentWeatherstatus = res.current.condition.text;
+        this.headerWeatherInfo.temperature = res.current.temp_c;
+        this.headerWeatherInfo.tempfeelslike = res.current.feelslike_c;
+        this.headerWeatherInfo.day = res.location.localtime;
+  
+      })
     })
+    }else{
+      this.weatherService.getWeatherInfo(location).subscribe(res => {
+        this.headerWeatherInfo.locationName = res.location.name;
+        this.headerWeatherInfo.currentWeatherstatus = res.current.condition.text;
+        this.headerWeatherInfo.temperature = res.current.temp_c;
+        this.headerWeatherInfo.tempfeelslike = res.current.feelslike_c;
+        this.headerWeatherInfo.day = res.location.localtime;
+    }
+    )
   }
-
+}
 }

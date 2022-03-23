@@ -1,0 +1,55 @@
+<button style="margin-top: 30px; background-image: linear-gradient(rgb(120, 199, 241),rgb(8, 51, 131) ,rgb(120, 199, 241));" class="btn btn-success" (click)="open(mymodal);" >Locations</button>
+
+<!-- <div class="alert alert-danger" role="alert">
+  {{error}}
+</div> -->
+<ng-template #mymodal let-modal>
+  <div class="modal-header" style="background-image: linear-gradient(rgb(13, 70, 177) ,rgb(110, 189, 231));">
+    <h4 class="modal-title" id="modal-basic-title" style="color: white;">Locations</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body" style="background-color: rgb(79, 155, 196); overflow-y: auto;
+  max-height: 350px;">
+    <div style="margin-bottom: 20px;">
+      <input #location type="text" placeholder="Enter a location" class="form-control" class="col-md-11">
+      <i (click)="saveLocation(location.value); location.value=''" class="fa fa-plus" aria-hidden="true"
+        style="color: white; padding: 10px;"></i>
+    </div>
+    <!-- <div *ngFor="let temp of locations">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="col-md-2">
+            {{temp.locationName}}
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div>
+      <div *ngFor="let temp of weatherTemperature" style="border: 2px solid white; background-image: linear-gradient(rgb(54, 112, 238),#78b9e4e5, rgb(54, 112, 238)); margin: 4px;"> 
+        <div style=" height: 40px; display: flex; border-color: white;" class="container">
+            <div style="width: 165px; padding-left: 20px;" (click)="viewInfo(temp); modal.close('Save click')">
+              <p>{{temp.locationName | titlecase}}</p>
+            </div>
+            <div style="width: 80px;" (click)="viewInfo(temp); modal.close('Save click')">
+              <p>{{temp.minTemp | number: '1.0-0'}}&deg;</p>
+            </div>
+            <div style="width: 80px;" (click)="viewInfo(temp); modal.close('Save click')">
+              <p>{{temp.maxTemp | number: '1.0-0'}}&deg;</p>
+            </div>
+            <div style="width: 80px;" (click)="viewInfo(temp); modal.close('Save click')">
+              <img src="{{temp.icon}}" style="height: 35px; width: 35px;">
+              <!-- <i (click)="viewInfo(temp); modal.close('Save click')" class="fa fa-eye" aria-hidden="true"></i> -->
+            </div>
+            <div class="icon">
+              <i class="fa fa-trash" aria-hidden="true" (click)="deleteLocation(temp)"></i>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="modal-footer" style="background-image: linear-gradient(rgb(13, 70, 177) ,rgb(110, 189, 231));">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click'); refresh()">Ok</button>
+  </div>
+</ng-template>
