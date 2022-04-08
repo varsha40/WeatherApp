@@ -8,9 +8,9 @@ describe('AstroWeatherInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AstroWeatherInfoComponent ]
+      declarations: [AstroWeatherInfoComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

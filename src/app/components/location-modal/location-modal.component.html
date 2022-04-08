@@ -1,0 +1,42 @@
+<img id="loc" src="assets/images/location.png" class="image-container" (click)="open(mymodal)">
+
+<ng-template #mymodal let-modal data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-header" [ngStyle]="{backgroundColor: status ? 'black' :  'rgb(79, 155, 196)'}">
+    <h1 class="modal-title" id="modal-basic-title">Locations</h1>
+    <i (click)="modal.dismiss('Cross click');refresh()" class="fa fa-times fa-lg" id="dismiss" aria-hidden="true"></i>
+  </div>
+
+  <div class="modal-body body" [ngStyle]="{backgroundColor: status ? 'black' :  'rgb(79, 155, 196)'}">
+    <div id="text-box">
+      <input #location type="text" placeholder="Enter a location" class="form-control" class="col-md-11">
+      <i (click)="saveLocation(location.value); location.value=''" class="fa fa-plus fa-lg" aria-hidden="true"></i>
+    </div>
+    <hr>
+
+    <div>
+      <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)"
+        [ngStyle]="{backgroundColor: status ? 'black' :  'rgb(79, 155, 196)'}">
+        <div class="example-box modal-box" *ngFor="let temp of weatherTemperature" cdkDrag
+          [ngStyle]="{backgroundImage : status ? 'linear-gradient(rgb(0, 0, 0),rgb(0,0,0))' : 'linear-gradient(rgb(79, 155, 196),rgb(32, 112, 177),rgb(79, 155, 196))'}"
+          [routerLink]="['/weather/', temp.locationName]" (click)="viewInfo(temp); modal.close('Save click')">
+          <div style="display: inline;" class="con1"
+            [ngStyle]="{backgroundImage: status ? 'linear-gradient(rgb(0, 0, 0),rgb(0,0,0))' :  'linear-gradient(rgb(79, 155, 196),rgb(32, 112, 177),rgb(79, 155, 196))'}">
+            <h3>{{temp.locationName | titlecase}}</h3>
+            <p id="status" class="header-comp">{{temp.text}}</p>
+            <p id="tem" class="header-comp">H:{{temp.maxTemp | number: '1.0-0'}}&deg;
+              L:{{temp.minTemp| number: '1.0-0'}}&deg;</p>
+          </div>
+          <div class="con2"
+            [ngStyle]="{backgroundImage: status ? 'linear-gradient(rgb(0, 0, 0),rgb(0,0,0))' :  'linear-gradient(rgb(79, 155, 196),rgb(32, 112, 177),rgb(79, 155, 196))'}">
+            <img id="status-icon" src="{{temp.icon}}">
+            <i class="fa fa-trash fa-2x" id="del" aria-hidden="true" (click)="deleteLocation(temp)"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer" [ngStyle]="{backgroundColor: status ? 'black' :  'rgb(79, 155, 196)'}">
+  </div>
+
+</ng-template>

@@ -1,4 +1,8 @@
-p{
-    font-size: large;
+p {
+    font-size: medium;
     padding: 0px;
+}
+
+.astro {
+    padding-left: 80px;
 }

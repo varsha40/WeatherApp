@@ -1,34 +1,42 @@
-.vr{
-    height:200px;
-    width:2px;
+.vr {
+    height: 200px;
+    width: 2px;
     display: inline-block;
 }
-.upcoming-forecast{
+
+.upcoming-forecast {
     display: flex;
     flex-wrap: wrap;
 }
-.division1{
+
+.division1 {
     margin-top: 0px;
     padding-left: 25px;
     padding-right: 140px;
 }
-.division2{
+
+.division2 {
     padding-right: 140px;
 }
-.division3{
+
+.division3 {
     padding-right: 30px
 }
-.division4{
+
+.division4 {
     padding-right: 80px;
-    
+
 }
-.container1{
+
+.container1 {
     font-size: large;
 }
-.image{
+
+.image {
     width: 40px;
     height: 30px;
 }
-#id{
+
+#id {
     color: rgb(211, 216, 221);
 }

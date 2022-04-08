@@ -11,27 +11,48 @@ import { ActivatedRoute } from '@angular/router';
 export class UpcomingDaysForecastComponent implements OnInit {
 
   upcomingDaysForecastInfo: UpcomingDaysForecast[] = [];
+  locationName: string = '';
   constructor(private weatherService: WeatherserviceService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-
     let location = this.route.snapshot.paramMap.get('location');
-    if(location === null){
-      location = "Bhubaneswar"
+    if (location === null) {
+      this.weatherService.getallLocations().subscribe((data) => {
+        if (data.length == 0) {
+          this.locationName = "Bhubaneswar"
+        }
+        else {
+          this.locationName = data[0].location
+        }
+        this.weatherService.getWeatherInfo(this.locationName).subscribe((res) => {
+          for (var i = 0; i < res.forecast.forecastday.length; i += 1) {
+
+            const temp = new UpcomingDaysForecast(
+              res.forecast.forecastday[i].date,
+              res.forecast.forecastday[i].day.condition.icon,
+              res.forecast.forecastday[i].day.maxtemp_f,
+              res.forecast.forecastday[i].day.mintemp_f,
+            )
+            this.upcomingDaysForecastInfo.push(temp)
+          }
+        })
+      })
     }
-    this.weatherService.getWeatherInfo(location).subscribe((res) => {
-      for (var i = 0; i < res.forecast.forecastday.length; i += 1) {
+    else {
+      this.weatherService.getWeatherInfo(location).subscribe((res) => {
+        for (var i = 0; i < res.forecast.forecastday.length; i += 1) {
 
-        const temp = new UpcomingDaysForecast(
-          res.forecast.forecastday[i].date,
-          res.forecast.forecastday[i].day.condition.icon,
-          res.forecast.forecastday[i].day.maxtemp_f,
-          res.forecast.forecastday[i].day.mintemp_f,
-        )
+          const temp = new UpcomingDaysForecast(
+            res.forecast.forecastday[i].date,
+            res.forecast.forecastday[i].day.condition.icon,
+            res.forecast.forecastday[i].day.maxtemp_f,
+            res.forecast.forecastday[i].day.mintemp_f,
+          )
 
-        this.upcomingDaysForecastInfo.push(temp)
-      }
-    })
+          this.upcomingDaysForecastInfo.push(temp)
+        }
+      })
+    }
+
   }
-
 }
