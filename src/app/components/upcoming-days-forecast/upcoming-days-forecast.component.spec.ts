@@ -8,9 +8,9 @@ describe('UpcomingDaysForecastComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UpcomingDaysForecastComponent ]
+      declarations: [UpcomingDaysForecastComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

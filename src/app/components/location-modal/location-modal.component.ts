@@ -1,14 +1,13 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { HeaderWeatherInfo } from 'src/app/models/header-weather-info';
+import { Component, OnInit, Input} from '@angular/core';
 import { WeatherTemperature } from 'src/app/models/weather-temperature';
 import { WeatherserviceService } from 'src/app/services/weatherservice.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
-import { count, from, map } from 'rxjs';
+import { from } from 'rxjs';
+import { concatMap, map, switchMap } from 'rxjs/operators';
 import { Location } from 'src/app/models/location';
-import { templateJitUrl, ThrowStmt } from '@angular/compiler';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { AlertifyService } from 'src/app/services/alertify.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-location-modal',
@@ -16,100 +15,42 @@ import { AlertifyService } from 'src/app/services/alertify.service';
   styleUrls: ['./location-modal.component.css']
 })
 export class LocationModalComponent implements OnInit {
-
+  @Input() status: boolean = false;
   error: string = '';
   weatherTemperature: WeatherTemperature[] = [];
   locations: Location[] = [];
   closeResult: string = '';
   count: number = 0;
-  location : number = 0;
-  weather = new WeatherTemperature(0,'',0,0,'');
-  constructor(private weatherService: WeatherserviceService, private modalService: NgbModal, private router: Router, private route: ActivatedRoute,private alertyfy: AlertifyService) { }
+  location: number = 0;
+  weather = new WeatherTemperature(0, '', 0, 0, '', '');
+  c: number = 0;
+  names: string[] = [];
+
+  constructor(private weatherService: WeatherserviceService, private modalService: NgbModal, private router: Router, private route: ActivatedRoute, private alertyfy: AlertifyService) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
 
   ngOnInit(): void {
   }
-  // view(location : any){
-
-  //   this.weatherService.getLocationDetails(location.locationName).subscribe((res) =>{
-
-  //     this.weather =  res;
-  //   })
-  //   return this.weather;
-  // }
   open(content: any) {
-    this.locations=[];
+    this.locations = [];
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    // this.weatherService.getallLocations().subscribe((res) => {
 
-    //   console.log(res);
-    //   const t = from(res);
-    //   console.log(t);
-    //   t.pipe(
-    //     map((data) => this.view(data))
-    //   ).subscribe((data) =>{
-    //     console.log(data);
-    //   })
-    //   for(var i = 0; i < res.length; i += 1) {
-
-    //     const temp = new Location(res[i].locationId, res[i].location);
-    //     console.log(res[i].location);
-    //     this.locations.push(temp);
-    //   }
-    // }
-    // ); 
-
-    // this.weatherService.getallLocations().subscribe((res) =>{
-    //   for(var i = 0 ; i < res.length; i+=1){
-
-    //     this.locations.push(new Location(res[i].locationId, res[i].locationName))
-    //   }
-    // })
-    // console.log(this.locations);
-    // for(var i = 0; i < this.locations.length; i+=1){
-
-    //   this.weatherService.getLocationDetails(this.locations[i].locationName).subscribe((res) =>{
-
-    //     const temp =  new WeatherTemperature(res.location.locationId, res.location.location,res.minTemp, res.maxTemp, res.icon);
-    //     this.weatherTemperature.push(temp);
-    //   }
-    //   )
-    //   console.log(this.weatherTemperature)
-    // }
-    // console.log(this.weatherTemperature);
     this.weatherTemperature = [];
-    this.weatherService.getallLocations().subscribe((res) => {
-      console.log(res);
-      for (var i = 0; i < res.length; i += 1) {
-
-        const temp = new Location(res[i].locationId, res[i].location);
-        this.weatherService.getLocationDetails(res[i].location)?.subscribe((info) => {
-
-          const temp = new WeatherTemperature(info.location.locationId, info.location.location, info.minTemp, info.maxTemp, info.icon);
-          this.weatherTemperature.push(temp);
-        })
-      }
-    })
-    console.log(this.weatherTemperature);
+    this.weatherService.getallLocations().pipe(
+      switchMap((res: any) => {
+        for (var i = 0; i < res.length; i += 1) {
+          this.locations.push(new Location(res[i].locationId, res[i].location, res[i].locationOrder))
+        }
+        return from(this.locations);
+      }),
+      concatMap((data) => this.weatherService.getLocationDetails(data.locationName))
+    ).subscribe((info) => this.weatherTemperature.push(new WeatherTemperature(info.location.locationId, info.location.location, info.minTemp, info.maxTemp, info.text, info.icon)));
   }
-  // view(locations : Location[]){
-
-  //   for(var i = 0; i < locations.length; i+=1){
-
-  //     this.weatherService.getLocationDetails(locations[i].locationName).subscribe((res) =>{
-
-  //       console.log("hello");
-  //       const temp =  new WeatherTemperature(res.location.locationId, res.location.location,res.minTemp, res.maxTemp, res.icon);
-  //       this.weatherTemperature.push(temp);
-  //     }
-  //     )
-  //   }
-  // }
-
-
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -122,25 +63,21 @@ export class LocationModalComponent implements OnInit {
   saveLocation(location: string) {
     this.weatherService.saveLocation(location).subscribe((res) => {
 
-      const temp = new WeatherTemperature(res.location.locationId, res.location.location, res.minTemp, res.maxTemp, res.icon);
+      const temp = new WeatherTemperature(res.location.locationId, res.location.location, res.minTemp, res.maxTemp, res.text, res.icon);
       this.weatherTemperature.push(temp);
       this.alertyfy.success("Location Saved Successfully");
     }
     );
   }
   viewInfo(temp: any) {
-    this.router.navigate(['/weather/' + temp.locationName]).then(() => {
-      window.location.reload();
-    });
+    this.router.navigate(['/weather/' + temp.locationName]);
   }
 
   deleteLocation(temp: any) {
 
     this.location = this.weatherTemperature.findIndex(x => x.locationId == temp.locationId)
     this.weatherTemperature.splice(this.location, 1);
-    console.log(this.location);
-    console.log(temp.locationId);
-    this.weatherService.deleteLocation(temp.locationId).subscribe((res) => {
+    this.weatherService.deleteLocation(temp.locationName).subscribe((res) => {
     }, (error: any) => {
       this.error = error.error;
       console.log(this.error);
@@ -149,9 +86,7 @@ export class LocationModalComponent implements OnInit {
 
   refresh() {
 
-    let location = this.route.snapshot.paramMap.get('location')
-    console.log(location)
-    console.log(this.location);
+    let location = this.route.snapshot.paramMap.get('location');
     if (this.weatherTemperature.length > 0 && location != null) {
 
       for (var i = 0; i < this.weatherTemperature.length; i += 1) {
@@ -163,23 +98,25 @@ export class LocationModalComponent implements OnInit {
         window.location.reload();
       }
       else {
-        console.log(this.weatherTemperature);
         if (this.location == 0) {
 
-          this.router.navigate(['/weather/' + this.weatherTemperature[this.location].locationName]).then(() => {
-            window.location.reload();
-          });
+          this.router.navigate(['/weather/' + this.weatherTemperature[this.location].locationName])
         } else {
-          this.router.navigate(['/weather/' + this.weatherTemperature[this.location - 1].locationName]).then(() => {
-            window.location.reload();
-          });
+          this.router.navigate(['/weather/' + this.weatherTemperature[this.location - 1].locationName])
         }
       }
-    } else if(this.weatherTemperature.length > 0 && location == null) {
-      this.router.navigate(['/weather/' + this.weatherTemperature[0].locationName]).then(() => {
-        window.location.reload();
-    })}else{
-        this.router.navigate(['']);
+    } else if (this.weatherTemperature.length > 0 && location == null) {
+      
+      this.router.navigate(['/weather/' + this.weatherTemperature[0].locationName])
     }
+    else {
+      this.router.navigate(['']);
+    }
+  }
+  drop(event: CdkDragDrop<string[]>) {
+
+    moveItemInArray(this.weatherTemperature, event.previousIndex, event.currentIndex);
+    this.weatherService.updateLocationOrder(event.previousIndex, event.currentIndex).subscribe((res) =>
+      console.log(res));
   }
 }

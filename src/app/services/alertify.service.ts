@@ -7,10 +7,10 @@ import * as alertyfy from 'alertifyjs'
 export class AlertifyService {
 
   constructor() { }
-  error(message : string){
+  error(message: string) {
     alertyfy.error(message);
   }
-  success(message :string){
+  success(message: string) {
     alertyfy.success(message);
   }
 }

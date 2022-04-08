@@ -5,14 +5,14 @@ import { WeatherTemperature } from '../models/weather-temperature';
   providedIn: 'root'
 })
 export class SharedService {
-  
-  weather =  new WeatherTemperature(0,'',0,0,'');
+
+  weather = new WeatherTemperature(0, '', 0, 0, '', '');
   constructor() { }
 
-  setData(data : WeatherTemperature){
-    this.weather =  data;
+  setData(data: WeatherTemperature) {
+    this.weather = data;
   }
-  getData(){
+  getData() {
     return this.weather;
   }
 }

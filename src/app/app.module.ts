@@ -20,6 +20,8 @@ import { LocationModalComponent } from './components/location-modal/location-mod
 import { WeatherserviceService } from './services/weatherservice.service';
 import { AlertifyService } from './services/alertify.service';
 import { HttpErrorInterceptorService } from './services/httperror-interceptor.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import { HttpErrorInterceptorService } from './services/httperror-interceptor.se
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    BrowserAnimationsModule,
+    DragDropModule
   ],
   providers: [ {
     provide : HTTP_INTERCEPTORS,

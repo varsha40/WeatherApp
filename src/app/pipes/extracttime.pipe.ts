@@ -9,5 +9,4 @@ export class ExtracttimePipe implements PipeTransform {
 
     return value.split(" ")[1];
   }
-
 }

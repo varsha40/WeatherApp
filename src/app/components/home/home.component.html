@@ -1,18 +1,24 @@
-<div class="container text-white">
-    <div>
-      <app-header-weather-info></app-header-weather-info>
-    </div>
-    <hr>
-    <app-weather-forecast></app-weather-forecast>
-    <hr>
-    <div>
-      <app-upcoming-days-forecast></app-upcoming-days-forecast>
-    </div>
-    <hr>
-    <div>
-      <app-extra-weather-info></app-extra-weather-info>
-    </div>
+<div class="container text-white" [ngStyle]="{backgroundColor: status ? 'black' :  'rgb(79, 155, 196)'} ">
+  <div>
+    <app-header-weather-info></app-header-weather-info>
+  </div>
+  <hr>
+  <app-weather-forecast></app-weather-forecast>
+  <hr>
+  <div>
+    <app-upcoming-days-forecast></app-upcoming-days-forecast>
+  </div>
+  <hr>
+  <div>
+    <app-extra-weather-info></app-extra-weather-info>
+  </div>
+  <hr>
+  <div class="con">
+    <app-location-modal [status]="status"></app-location-modal>
+  </div>
+  <div class="form-check form-control-lg form-switch">
+    <input class="form-check-input" type="checkbox" autocomplete="off" (change)="checkCheckBoxvalue($event)"
+      id="flexSwitchCheckChecked2">
+    <label class="form-check-label" for="flexSwitchCheckChecked2">Dark mode</label>
+  </div>
 </div>
-
-
- 

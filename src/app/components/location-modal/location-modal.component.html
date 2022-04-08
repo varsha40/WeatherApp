@@ -1,55 +1,42 @@
-<button style="margin-top: 30px; background-image: linear-gradient(rgb(120, 199, 241),rgb(8, 51, 131) ,rgb(120, 199, 241));" class="btn btn-success" (click)="open(mymodal);" >Locations</button>
+<img id="loc" src="assets/images/location.png" class="image-container" (click)="open(mymodal)">
 
-<!-- <div class="alert alert-danger" role="alert">
-  {{error}}
-</div> -->
-<ng-template #mymodal let-modal>
-  <div class="modal-header" style="background-image: linear-gradient(rgb(13, 70, 177) ,rgb(110, 189, 231));">
-    <h4 class="modal-title" id="modal-basic-title" style="color: white;">Locations</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
+<ng-template #mymodal let-modal data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-header" [ngStyle]="{backgroundColor: status ? 'black' :  'rgb(79, 155, 196)'}">
+    <h1 class="modal-title" id="modal-basic-title">Locations</h1>
+    <i (click)="modal.dismiss('Cross click');refresh()" class="fa fa-times fa-lg" id="dismiss" aria-hidden="true"></i>
   </div>
-  <div class="modal-body" style="background-color: rgb(79, 155, 196); overflow-y: auto;
-  max-height: 350px;">
-    <div style="margin-bottom: 20px;">
+
+  <div class="modal-body body" [ngStyle]="{backgroundColor: status ? 'black' :  'rgb(79, 155, 196)'}">
+    <div id="text-box">
       <input #location type="text" placeholder="Enter a location" class="form-control" class="col-md-11">
-      <i (click)="saveLocation(location.value); location.value=''" class="fa fa-plus" aria-hidden="true"
-        style="color: white; padding: 10px;"></i>
+      <i (click)="saveLocation(location.value); location.value=''" class="fa fa-plus fa-lg" aria-hidden="true"></i>
     </div>
-    <!-- <div *ngFor="let temp of locations">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="col-md-2">
-            {{temp.locationName}}
+    <hr>
+
+    <div>
+      <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)"
+        [ngStyle]="{backgroundColor: status ? 'black' :  'rgb(79, 155, 196)'}">
+        <div class="example-box modal-box" *ngFor="let temp of weatherTemperature" cdkDrag
+          [ngStyle]="{backgroundImage : status ? 'linear-gradient(rgb(0, 0, 0),rgb(0,0,0))' : 'linear-gradient(rgb(79, 155, 196),rgb(32, 112, 177),rgb(79, 155, 196))'}"
+          [routerLink]="['/weather/', temp.locationName]" (click)="viewInfo(temp); modal.close('Save click')">
+          <div style="display: inline;" class="con1"
+            [ngStyle]="{backgroundImage: status ? 'linear-gradient(rgb(0, 0, 0),rgb(0,0,0))' :  'linear-gradient(rgb(79, 155, 196),rgb(32, 112, 177),rgb(79, 155, 196))'}">
+            <h3>{{temp.locationName | titlecase}}</h3>
+            <p id="status" class="header-comp">{{temp.text}}</p>
+            <p id="tem" class="header-comp">H:{{temp.maxTemp | number: '1.0-0'}}&deg;
+              L:{{temp.minTemp| number: '1.0-0'}}&deg;</p>
+          </div>
+          <div class="con2"
+            [ngStyle]="{backgroundImage: status ? 'linear-gradient(rgb(0, 0, 0),rgb(0,0,0))' :  'linear-gradient(rgb(79, 155, 196),rgb(32, 112, 177),rgb(79, 155, 196))'}">
+            <img id="status-icon" src="{{temp.icon}}">
+            <i class="fa fa-trash fa-2x" id="del" aria-hidden="true" (click)="deleteLocation(temp)"></i>
           </div>
         </div>
       </div>
-    </div> -->
-    <div>
-      <div *ngFor="let temp of weatherTemperature" style="border: 2px solid white; background-image: linear-gradient(rgb(54, 112, 238),#78b9e4e5, rgb(54, 112, 238)); margin: 4px;"> 
-        <div style=" height: 40px; display: flex; border-color: white;" class="container">
-            <div style="width: 165px; padding-left: 20px;" (click)="viewInfo(temp); modal.close('Save click')">
-              <p>{{temp.locationName | titlecase}}</p>
-            </div>
-            <div style="width: 80px;" (click)="viewInfo(temp); modal.close('Save click')">
-              <p>{{temp.minTemp | number: '1.0-0'}}&deg;</p>
-            </div>
-            <div style="width: 80px;" (click)="viewInfo(temp); modal.close('Save click')">
-              <p>{{temp.maxTemp | number: '1.0-0'}}&deg;</p>
-            </div>
-            <div style="width: 80px;" (click)="viewInfo(temp); modal.close('Save click')">
-              <img src="{{temp.icon}}" style="height: 35px; width: 35px;">
-              <!-- <i (click)="viewInfo(temp); modal.close('Save click')" class="fa fa-eye" aria-hidden="true"></i> -->
-            </div>
-            <div class="icon">
-              <i class="fa fa-trash" aria-hidden="true" (click)="deleteLocation(temp)"></i>
-            </div>
-          </div>
-        </div>
     </div>
   </div>
-  <div class="modal-footer" style="background-image: linear-gradient(rgb(13, 70, 177) ,rgb(110, 189, 231));">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click'); refresh()">Ok</button>
+
+  <div class="modal-footer" [ngStyle]="{backgroundColor: status ? 'black' :  'rgb(79, 155, 196)'}">
   </div>
+
 </ng-template>
